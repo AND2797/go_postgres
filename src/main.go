@@ -1,23 +1,23 @@
 package main
 
-import (
-        "gorm.io/driver/postgres"
-        "gorm.io/gorm"
+import(
+        "database/sql"
+        "fmt"
+        _ "github.com/lib/pq"
     )
+
 func main() {
-    dsn := "host=localhost user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=EST"
-    db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-    if err != nil {
-        panic(err.Error())
-    }
 
-
-    database := db.DB()
-
-    err := database.Ping()
-
+    connStr := "user=postgres dbname=postgres password=postgres host=localhost sslmode=disable"
+    db, err := sql.Open("postgres", connStr)
     if err != nil{
-        panic(err.Error())
+        panic(err)
     }
+    defer db.Close()
 
+    err = db.Ping()
+    if err != nil{
+        panic(err)
+    }
+    fmt.Println("successful!")
 }
